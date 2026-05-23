@@ -987,8 +987,43 @@ function showFeedback(text){
 
 async function createPosterCanvas(){
 
-  const inner =
-  document.getElementById('poster-inner');
+  async function createPosterCanvas(){
+
+  const poster = document.getElementById('poster');
+
+  await waitForFonts();
+  await new Promise(r => setTimeout(r, 300));
+
+  const canvas = await html2canvas(poster, {
+
+    backgroundColor: '#080808',
+
+    scale: 2,
+
+    useCORS: true,
+    allowTaint: true,
+
+    width: poster.offsetWidth,
+    height: poster.offsetHeight,
+
+    foreignObjectRendering: true,
+
+    onclone: (doc) => {
+      doc.querySelectorAll('*').forEach(el => {
+        el.style.animationPlayState = 'paused';
+      });
+
+      // جلوگیری از glitch خراب توی export
+      const glitch = doc.querySelector('.glitch');
+      if (glitch) {
+        glitch.style.animation = 'none';
+      }
+    }
+
+  });
+
+  return canvas;
+  }
 
   await waitForFonts();
 
